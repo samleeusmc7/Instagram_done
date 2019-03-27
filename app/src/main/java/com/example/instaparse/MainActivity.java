@@ -10,8 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
 public class MainActivity extends AppCompatActivity
 {
+
+    private static final String TAG = "LOGINACTIVITY";
 
     private EditText etUsername;
     private EditText etPassword;
@@ -40,5 +46,26 @@ public class MainActivity extends AppCompatActivity
 
     private void login(String username, String password)
     {
+        ParseUser.logInInBackground(username, password, new LogInCallback()
+        {
+            @Override
+            public void done(ParseUser user, ParseException e)
+            {
+              if (e != null)
+              {
+                  Log.e(TAG,"Issue with login");
+                  e.printStackTrace();
+                  return;
+              }
+              goMainActivity();
+            }
+        });
+    }
+
+    private void goMainActivity()
+    {
+        Intent i = new Intent(this, Main2Activity.class);
+        startActivity(i);
+        finish();
     }
 }
